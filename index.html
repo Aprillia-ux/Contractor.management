@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Management</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f9;
+      color: #1e293b;
+    }
+    header {
+      background: #142d4e;
+      color: white;
+      padding: 24px;
+    }
+    header h1 { margin: 0 0 8px; }
+    header p { margin: 0; color: #dbeafe; }
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      background: white;
+    }
+    nav a {
+      text-decoration: none;
+      color: #142d4e;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #eef3fa;
+      font-weight: bold;
+    }
+    main { padding: 24px; max-width: 1200px; margin: auto; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .card, section {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #142d4e0c;
+      margin-bottom: 20px;
+    }
+    .card p { color: #64748b; margin: 0 0 10px; }
+    .number { font-size: 28px; font-weight: bold; color: #176b87; }
+    h2 { margin-top: 0; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select, button {
+      padding: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 14px;
+    }
+    input, select { flex: 1; min-width: 150px; }
+    button {
+      background: #176b87;
+      color: white;
+      border: 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #12546b; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      white-space: nowrap;
+    }
+    th { background: #f8fafc; }
+    .delete { background: #b91c1c; }
+    .note { color: #64748b; font-size: 13px; }
+    footer { text-align: center; padding: 20px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Contractor Management</h1>
+    <p>Sistem Informasi Manajemen Proyek Konstruksi</p>
+  </header>
+
+  <nav>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#proyek">Proyek</a>
+    <a href="#pekerja">Pekerja</a>
+    <a href="#keuangan">Keuangan</a>
+    <a href="#laporan">Laporan</a>
+  </nav>
+
+  <main>
+    <section id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="cards">
+        <div class="card">
+          <p>Total Proyek</p>
+          <div class="number" id="totalProyek">0</div>
+        </div>
+        <div class="card">
+          <p>Total Pekerja</p>
+          <div class="number" id="totalPekerja">0</div>
+        </div>
+        <div class="card">
+          <p>Total Pemasukan</p>
+          <div class="number" id="totalMasuk">Rp0</div>
+        </div>
+        <div class="card">
+          <p>Total Pengeluaran</p>
+          <div class="number" id="totalKeluar">Rp0</div>
+        </div>
+        <div class="card">
+          <p>Saldo</p>
+          <div class="number" id="saldo">Rp0</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="proyek">
+      <h2>Data Proyek</h2>
+      <form id="formProyek" class="form-row">
+        <input id="namaProyek" placeholder="Nama proyek" required>
+        <input id="lokasiProyek" placeholder="Lokasi proyek" required>
+        <input id="anggaranProyek" type="number" min="0" placeholder="Anggaran (Rp)" required>
+        <button type="submit">Tambah Proyek</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nama</th><th>Lokasi</th><th>Anggaran</th><th>Aksi</th></tr></thead>
+          <tbody id="daftarProyek"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pekerja">
+      <h2>Data Pekerja</h2>
+      <form id="formPekerja" class="form-row">
+        <input id="namaPekerja" placeholder="Nama pekerja" required>
+        <select id="jabatanPekerja">
+          <option>Pekerja</option>
+          <option>Mandor</option>
+          <option>Admin</option>
+          <option>Keuangan</option>
+        </select>
+        <button type="submit">Tambah Pekerja</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nama</th><th>Jabatan</th><th>Aksi</th></tr></thead>
+          <tbody id="daftarPekerja"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="keuangan">
+      <h2>Catatan Keuangan</h2>
+      <form id="formKeuangan" class="form-row">
+        <input id="keterangan" placeholder="Keterangan transaksi" required>
+        <select id="jenisTransaksi">
+          <option value="masuk">Pemasukan</option>
+          <option value="keluar">Pengeluaran</option>
+        </select>
+        <input id="nominal" type="number" min="1" placeholder="Nominal (Rp)" required>
+        <button type="submit">Simpan Transaksi</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Keterangan</th><th>Jenis</th><th>Nominal</th><th>Aksi</th></tr></thead>
+          <tbody id="daftarKeuangan"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="laporan">
+      <h2>Laporan Ringkas</h2>
+      <p id="ringkasan">Belum ada data untuk dilaporkan.</p>
+      <button onclick="window.print()">Cetak / Simpan PDF</button>
+      <p class="note">Versi awal: data disimpan di browser perangkat ini, belum dibagikan ke pengguna lain.</p>
+    </section>
+  </main>
+
+  <footer>Contractor Management © 2026</footer>
+
+  <script>
+    const ambil = key => {
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch { return []; }
+    };
+    let proyek = ambil("cm_proyek");
+    let pekerja = ambil("cm_pekerja");
+    let keuangan = ambil("cm_keuangan");
+
+    const rupiah = angka => new Intl.NumberFormat("id-ID", {
+      style: "currency", currency: "IDR", maximumFractionDigits: 0
+    }).format(angka);
+
+    const aman = teks => String(teks).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#39;"
+    })[c]);
+
+    function simpan() {
+      localStorage.setItem("cm_proyek", JSON.stringify(proyek));
+      localStorage.setItem("cm_pekerja", JSON.stringify(pekerja));
+      localStorage.setItem("cm_keuangan", JSON.stringify(keuangan));
+      render();
+    }
+
+    function hapus(jenis, id) {
+      if (!confirm("Yakin ingin menghapus data ini?")) return;
+      if (jenis === "proyek") proyek = proyek.filter(x => x.id !== id);
+      if (jenis === "pekerja") pekerja = pekerja.filter(x => x.id !== id);
+      if (jenis === "keuangan") keuangan = keuangan.filter(x => x.id !== id);
+      simpan();
+    }
+
+    function render() {
+      document.getElementById("totalProyek").textContent = proyek.length;
+      document.getElementById("totalPekerja").textContent = pekerja.length;
+
+      const masuk = keuangan.filter(x => x.jenis === "masuk")
+        .reduce((s, x) => s + x.nominal, 0);
+      const keluar = keuangan.filter(x => x.jenis === "keluar")
+        .reduce((s, x) => s + x.nominal, 0);
+      document.getElementById("totalMasuk").textContent = rupiah(masuk);
+      document.getElementById("totalKeluar").textContent = rupiah(keluar);
+      document.getElementById("saldo").textContent = rupiah(masuk - keluar);
+
+      document.getElementById("daftarProyek").innerHTML = proyek.map(x =>
+        `<tr><td>${aman(x.nama)}</td><td>${aman(x.lokasi)}</td>
+        <td>${rupiah(x.anggaran)}</td><td><button class="delete"
+        onclick="hapus('proyek',${x.id})">Hapus</button></td></tr>`
+      ).join("");
+
+      document.getElementById("daftarPekerja").innerHTML = pekerja.map(x =>
+        `<tr><td>${aman(x.nama)}</td><td>${aman(x.jabatan)}</td>
+        <td><button class="delete" onclick="hapus('pekerja',${x.id})">Hapus</button></td></tr>`
+      ).join("");
+
+      document.getElementById("daftarKeuangan").innerHTML = keuangan.map(x =>
+        `<tr><td>${aman(x.keterangan)}</td><td>${x.jenis === "masuk" ? "Pemasukan" : "Pengeluaran"}</td>
+        <td>${rupiah(x.nominal)}</td><td><button class="delete"
+        onclick="hapus('keuangan',${x.id})">Hapus</button></td></tr>`
+      ).join("");
+
+      document.getElementById("ringkasan").textContent =
+        `Terdapat ${proyek.length} proyek dan ${pekerja.length} pekerja. ` +
+        `Total pemasukan ${rupiah(masuk)}, pengeluaran ${rupiah(keluar)}, ` +
+        `saldo ${rupiah(masuk - keluar)}.`;
+    }
+
+    document.getElementById("formProyek").addEventListener("submit", e => {
+      e.preventDefault();
+      proyek.push({
+        id: Date.now(), nama: document.getElementById("namaProyek").value.trim(),
+        lokasi: document.getElementById("lokasiProyek").value.trim(),
+        anggaran: Number(document.getElementById("anggaranProyek").value)
+      });
+      e.target.reset();
+      simpan();
+    });
+
+    document.getElementById("formPekerja").addEventListener("submit", e => {
+      e.preventDefault();
+      pekerja.push({
+        id: Date.now(), nama: document.getElementById("namaPekerja").value.trim(),
+        jabatan: document.getElementById("jabatanPekerja").value
+      });
+      e.target.reset();
+      simpan();
+    });
+
+    document.getElementById("formKeuangan").addEventListener("submit", e => {
+      e.preventDefault();
+      keuangan.push({
+        id: Date.now(),
+        keterangan: document.getElementById("keterangan").value.trim(),
+        jenis: document.getElementById("jenisTransaksi").value,
+        nominal: Number(document.getElementById("nominal").value)
+      });
+      e.target.reset();
+      simpan();
+    });
+
+    render();
+  </script>
+</body>
+</html>
